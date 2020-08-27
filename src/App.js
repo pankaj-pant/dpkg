@@ -1,18 +1,38 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import PackageList from './components/PackageList'
+import PackageDetails from './components/PackageDetails'
 
 const App = () => {
   const [file, setFile] = useState()
-  const [packages, setPackages] = useState([])
+  const [packages, setPackages] = useState(null)
+  const [selectedPackage, setSelectedPackage] = useState({
+    name: '',
+    description: '',
+    dependencies: []
+  })
   const [reverseDependencies, setReverseDependencies] = useState({})
 
+  //bring selected package into view
+  useEffect(() => {
+    const element = document.querySelector('.active')
+    element && element.scrollIntoView({
+      behavior: 'smooth'
+    })
+  }, [selectedPackage])
+
+  //read file
   const readFile = (input) => {
     let reader = new FileReader()
-
     reader.onloadend = () => {
         parseFile(reader.result)
     } 
     reader.readAsText(input)
+    setSelectedPackage({
+      name: '',
+      description: '',
+      dependencies: []
+    })
 }
 
   const parseFile = (input) => {
@@ -73,18 +93,47 @@ const App = () => {
       } 
       return true
     })
+
+    //sort packages alphabetically
+    parsedPackages.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1
+      }
+      if (a.name > b.name) {
+        return 1
+      }
+      return 0
+    })  
+
     setPackages(parsedPackages)
     setReverseDependencies(reverseDependencies)
-    
+  }
+
+  const findPackage = (name) => {
+    return packages.find(pkg => pkg.name === name)
+  } 
+
+  const handleClick = (pkg) => {
+    const foundPackage = findPackage(pkg)
+    const {name, description, dependencies} = foundPackage
+    setSelectedPackage({
+      name,
+      description,
+      dependencies
+    })
   }
 
   return (
     <div className="App">
-      <h2>Package Analyser</h2>
-      <input type="file" onChange={(event) => setFile(event.target.files[0])}></input>
-      <button onClick={() => readFile(file)}>Read file</button>
-      <h3>List of packages</h3>
-      {packages.map(pkg => <li key={pkg.name}>{pkg.name}</li>)}
+      <section className="header">
+        <h2>Package Analyser</h2>
+      </section>
+      <section className="input">
+        <input type="file" onChange={(event) => setFile(event.target.files[0])}></input>
+        <button onClick={() => readFile(file)} disabled={!file}>Read file</button>
+      </section>
+      <PackageList packages={packages} selectedPackage={selectedPackage} handleClick={handleClick}/>
+      <PackageDetails packages={packages} selectedPackage={selectedPackage} reverseDependencies={reverseDependencies} handleClick={handleClick} findPackage={findPackage}/>
     </div>
   );
 }
