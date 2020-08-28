@@ -19,7 +19,7 @@ const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPac
                             Dependencies: 
                             {selectedPackage.dependencies.map((dep, i) => {
                                 if(findPackage(dep) === undefined) {
-                                return <li style ={{color: 'red'}} key={`${dep}-${i}`}>{dep}</li>
+                                return <li style ={{color: 'darkgray'}} key={`${dep}-${i}`}>{dep}</li>
                                 }
                                 return <li key={`${dep}-${i}`} onClick={() => handleClick(dep)}>{dep}</li>
                                 }

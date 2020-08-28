@@ -27,7 +27,7 @@
 }
 
 .scrollable{
-  height: 80vh;
+  height: 70vh;
   overflow-y: auto;
 }
 
@@ -60,7 +60,7 @@
   }
 
   .scrollable{
-    height: 40vh;
+    height: 35vh;
     overflow-y: auto;
   }
 }
