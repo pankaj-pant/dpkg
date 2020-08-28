@@ -9,7 +9,9 @@ const App = () => {
   const [selectedPackage, setSelectedPackage] = useState({
     name: '',
     description: '',
-    dependencies: []
+    dependencies: [],
+    notes: '',
+    tags: []
   })
   const [reverseDependencies, setReverseDependencies] = useState({})
 
@@ -31,7 +33,9 @@ const App = () => {
     setSelectedPackage({
       name: '',
       description: '',
-      dependencies: []
+      dependencies: [],
+      notes: '',
+      tags: []
     })
 }
 
@@ -82,10 +86,14 @@ const App = () => {
           packageObject['name'] = matchedPackageContent[0]
           packageObject['description'] = matchedPackageContent[1]
           packageObject['dependencies'] = []
+          packageObject['notes'] = ''
+          packageObject['tags'] = []
         } else {
           packageObject['name'] = matchedPackageContent[0]
           packageObject['dependencies'] = parseDependencies(matchedPackageContent[0], matchedPackageContent[1])
           packageObject['description'] = matchedPackageContent[2]
+          packageObject['notes'] = ''
+          packageObject['tags'] = []
         }
 
         parsedPackages.push(packageObject)
@@ -115,11 +123,13 @@ const App = () => {
 
   const handleClick = (pkg) => {
     const foundPackage = findPackage(pkg)
-    const {name, description, dependencies} = foundPackage
+    const {name, description, dependencies, notes, tags} = foundPackage
     setSelectedPackage({
       name,
       description,
-      dependencies
+      dependencies,
+      notes,
+      tags
     })
   }
 
@@ -127,13 +137,18 @@ const App = () => {
     <div className="App">
       <section className="header">
         <h2>Package Analyser</h2>
+        <p>
+          Select a dpkg status file to see the status of installed packages, or use this {" "}
+          <span>
+            <a href="https://gist.github.com/lauripiispanen/29735158335170c27297422a22b48caa" rel="noopener noreferrer" target="_blank">sample file.</a></span>
+        </p>
       </section>
       <section className="input">
         <input type="file" onChange={(event) => setFile(event.target.files[0])}></input>
         <button onClick={() => readFile(file)} disabled={!file}>Read file</button>
       </section>
       <PackageList packages={packages} selectedPackage={selectedPackage} handleClick={handleClick}/>
-      <PackageDetails packages={packages} selectedPackage={selectedPackage} reverseDependencies={reverseDependencies} handleClick={handleClick} findPackage={findPackage}/>
+      <PackageDetails packages={packages} selectedPackage={selectedPackage} reverseDependencies={reverseDependencies} handleClick={handleClick} findPackage={findPackage} setPackages={setPackages} setSelectedPackage={setSelectedPackage}/>
     </div>
   );
 }

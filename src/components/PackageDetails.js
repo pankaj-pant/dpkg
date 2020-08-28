@@ -1,32 +1,33 @@
 import React from 'react';
+import InputTag from './InputTag'
+import Notes from './Notes'
 
-const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPackage, handleClick}) => {
+const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPackage, handleClick, setPackages, setSelectedPackage}) => {
     return(
         <div className="package-info">
             {packages && packages.length > 0 && selectedPackage.name === '' && <div>Select a package from the list to know more about it!</div>}
             {packages && packages.length > 0 && selectedPackage.name !== '' &&
             <>
                 <h3>Package details</h3>
-                <br/>
                 <section className="scrollable">
-                    <p>Package name: {selectedPackage.name}</p> <br />
-                    <p>Description: {selectedPackage.description}</p> <br />
+                    <p>Package name: {selectedPackage.name}</p>
+                    <p>Description: {selectedPackage.description}</p>
+                    <Notes setPackages={setPackages}/>
+                    <br/>
+                    <InputTag selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
                     {selectedPackage.dependencies.length === 0 ? (
-                    <><p>Dependencies: None found!</p><br /></>
+                    <p>Dependencies: None found!</p>
                     ) : (
-                    <>
-                        <p>
-                            Dependencies: 
-                            {selectedPackage.dependencies.map((dep, i) => {
-                                if(findPackage(dep) === undefined) {
-                                return <li style ={{color: 'darkgray'}} key={`${dep}-${i}`}>{dep}</li>
-                                }
-                                return <li key={`${dep}-${i}`} onClick={() => handleClick(dep)}>{dep}</li>
-                                }
-                            )}
-                        </p>
-                        <br />
-                    </>
+                    <p>
+                        Dependencies: 
+                        {selectedPackage.dependencies.map((dep, i) => {
+                            if(findPackage(dep) === undefined) {
+                            return <li style ={{color: 'darkgray'}} key={`${dep}-${i}`}>{dep}</li>
+                            }
+                            return <li key={`${dep}-${i}`} onClick={() => handleClick(dep)}>{dep}</li>
+                            }
+                        )}
+                    </p>
                     )}
                     {reverseDependencies[selectedPackage.name] ? (
                     <p>
