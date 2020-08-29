@@ -13,7 +13,7 @@ const PackageList = ({packages, selectedPackage, handleClick}) => {
             {packages && packages.length > 0 && 
             <>
             <h3>List of packages</h3>
-            <input type="text" placeholder="Search" value={searchTerm} onChange={handleChange}/>
+            <input type="text" placeholder="Filter by tag" value={searchTerm} onChange={handleChange}/>
             <section className="package-list-container scrollable">
                 {packages.filter(pkg => {
                     if(searchTerm === "") {

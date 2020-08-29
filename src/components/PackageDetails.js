@@ -12,7 +12,7 @@ const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPac
                 <section className="scrollable">
                     <p>Package name: {selectedPackage.name}</p>
                     <p>Description: {selectedPackage.description}</p>
-                    <Notes setPackages={setPackages}/>
+                    <Notes selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
                     <br/>
                     <InputTag selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
                     {selectedPackage.dependencies.length === 0 ? (
