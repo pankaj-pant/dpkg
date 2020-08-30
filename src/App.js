@@ -15,12 +15,13 @@ const App = () => {
     notes: '',
     tags: []
   })
-  const [reverseDependencies, setReverseDependencies] = useState({})
+  const [reverseDependencies, setReverseDependencies] = useState(JSON.parse(localStorage.getItem('reverseDependenciesInLocalStorage')) || {})
 
   //save packages data to browser local storage
   useEffect(() => {
     localStorage.setItem('packagesInLocalStorage', JSON.stringify(packages))
-  }, [packages])
+    localStorage.setItem('reverseDependenciesInLocalStorage', JSON.stringify(reverseDependencies))
+  }, [packages, reverseDependencies])
 
   //save selectedPackage data to browser local storage & bring selected package into view
   useEffect(() => {
