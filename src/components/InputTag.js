@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 
 const InputTag = ({packages, selectedPackage, setPackages, setSelectedPackage}) => {
 
-    //const [tags, setTags] = useState([])
     const [currentValue, setCurrentValue] = useState("")
       
     const handleChange = (event) => {
@@ -29,22 +28,21 @@ const InputTag = ({packages, selectedPackage, setPackages, setSelectedPackage}) 
         const updatedPackages = packages.map(pkg => pkg.name === updatedPackage.name ? updatedPackage : pkg)
         setPackages(updatedPackages)
         setSelectedPackage(updatedPackage)
-
-        //setTags(newTags);
       }
   
     return (
-      <div className="input-tag">
-          Add a tag:
-        <ul className="input-tag__tags">
+      <div>
+        <h4>Add a tag:</h4>
+        <ul>
           { selectedPackage.tags.map((tag, i) => (
             <li key={tag}>
               {tag}
               <button type="button" onClick={() => deleteTag(i)}>-</button>
             </li>
           ))}
-          <li className="input-tag__tags__input">
+          <li>
               <input type="text" onChange={handleChange} value={currentValue}/>
+              {" "}
               <input type="button" onClick={handleClick} value="Add tag"/>
           </li>
         </ul>

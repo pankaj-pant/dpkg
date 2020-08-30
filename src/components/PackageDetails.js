@@ -1,6 +1,7 @@
 import React from 'react';
 import InputTag from './InputTag'
 import Notes from './Notes'
+import { v4 as uuidv4 } from 'uuid';
 
 const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPackage, handleClick, setPackages, setSelectedPackage}) => {
     return(
@@ -10,16 +11,15 @@ const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPac
             <>
                 <h3>Package details</h3>
                 <section className="scrollable">
-                    <p>Package name: {selectedPackage.name}</p>
-                    <p>Description: {selectedPackage.description}</p>
-                    <Notes selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
-                    <br/>
-                    <InputTag selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
+                    <h4>Name:</h4> 
+                    <p>{selectedPackage.name}</p>
+                    <h4>Description:</h4>
+                    <p>{selectedPackage.description}</p>
                     {selectedPackage.dependencies.length === 0 ? (
-                    <p>Dependencies: None found!</p>
+                    <><h4>Dependencies:</h4><p>None found!</p></>
                     ) : (
-                    <p>
-                        Dependencies: 
+                    <>
+                        <h4>Dependencies: </h4>
                         {selectedPackage.dependencies.map((dep, i) => {
                             if(findPackage(dep) === undefined) {
                             return <li style ={{color: 'darkgray'}} key={`${dep}-${i}`}>{dep}</li>
@@ -27,16 +27,19 @@ const PackageDetails = ({packages, selectedPackage, reverseDependencies, findPac
                             return <li key={`${dep}-${i}`} onClick={() => handleClick(dep)}>{dep}</li>
                             }
                         )}
-                    </p>
+                    </>
                     )}
                     {reverseDependencies[selectedPackage.name] ? (
-                    <p>
-                        Reverse dependencies: 
+                    <>
+                        <h4>Reverse dependencies:</h4>
                         {reverseDependencies[selectedPackage.name].map((rDep, i) => <li key={`${rDep}-${i}`} onClick={() => handleClick(rDep)}> {rDep}</li>)}
-                    </p>
+                    </>
                     ) : (
-                    <p>Reverse Dependencies: None found!</p>
-                    )}
+                    <><h4>Reverse dependencies:</h4><p>None found!</p></>
+                    )}       
+                    <InputTag key={selectedPackage.name} selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
+                    <br/>
+                    <Notes key={uuidv4()} selectedPackage={selectedPackage} setPackages={setPackages} packages={packages} setSelectedPackage={setSelectedPackage}/>
                 </section>
             </>
             }

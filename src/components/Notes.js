@@ -9,7 +9,7 @@ const Notes = ({packages, selectedPackage, setPackages, setSelectedPackage}) => 
     }
 
     const handleClick = () => {
-        if (note !== "") {
+        if (note.trim() !== "") {
             const updatedPackage = {...selectedPackage, notes: note}
             const updatedPackages = packages.map(pkg => pkg.name === updatedPackage.name ? updatedPackage : pkg)
             setPackages(updatedPackages)
@@ -24,16 +24,26 @@ const Notes = ({packages, selectedPackage, setPackages, setSelectedPackage}) => 
         setEdit(!edit)
     }
 
+    const deleteNote = () => {
+        const updatedPackage = {...selectedPackage, notes: ""}
+        const updatedPackages = packages.map(pkg => pkg.name === updatedPackage.name ? updatedPackage : pkg)
+        setPackages(updatedPackages)
+        setSelectedPackage(updatedPackage)
+        setNote("")
+        setEdit(true)
+    }
+
     const form = () => {
         return(
+            <>
+            <h4>Add a note:</h4>
             <form>
-                <label>
-                    Add a note:
-                </label>
                 <br/>
                 <textarea rows={5} cols={50} onChange={handleChange} value={note}/>
+                <br/>
                 <input type="button" onClick={handleClick} value="Save note"/>
             </form>
+            </>
         )
     }
 
@@ -43,9 +53,10 @@ const Notes = ({packages, selectedPackage, setPackages, setSelectedPackage}) => 
         } else {
             return (
                 <> 
-                    <p>Notes:</p>
-                    <p>{selectedPackage.notes}</p>
-                    <button onClick={editNote}>Edit note</button>
+                    <h4>Notes:</h4>
+                    {selectedPackage.notes}{" "}
+                    <button onClick={editNote}>Edit note</button>{" "}
+                    <button onClick={deleteNote}>Delete note</button>
                 </>
             )
         }
@@ -53,7 +64,7 @@ const Notes = ({packages, selectedPackage, setPackages, setSelectedPackage}) => 
     
     return (
         <div>
-            {selectedPackage.notes ? display() : form()} 
+            {selectedPackage.notes ? display() : form()}
         </div>
     )
 }

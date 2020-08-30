@@ -2,11 +2,13 @@ import React, {useState, useEffect} from 'react';
 import './App.css';
 import PackageList from './components/PackageList'
 import PackageDetails from './components/PackageDetails'
+import data from './status.real'
 
 const App = () => {
   const [file, setFile] = useState()
-  const [packages, setPackages] = useState(null)
-  const [selectedPackage, setSelectedPackage] = useState({
+  const [packages, setPackages] = useState(JSON.parse(localStorage.getItem('packagesInLocalStorage')) || null)
+  const [selectedPackage, setSelectedPackage] = useState(
+    JSON.parse(localStorage.getItem('selectedPackageInLocalStorage')) || {
     name: '',
     description: '',
     dependencies: [],
@@ -15,12 +17,18 @@ const App = () => {
   })
   const [reverseDependencies, setReverseDependencies] = useState({})
 
-  //bring selected package into view
+  //save packages data to browser local storage
+  useEffect(() => {
+    localStorage.setItem('packagesInLocalStorage', JSON.stringify(packages))
+  }, [packages])
+
+  //save selectedPackage data to browser local storage & bring selected package into view
   useEffect(() => {
     const element = document.querySelector('.active')
     element && element.scrollIntoView({
       behavior: 'smooth'
     })
+    localStorage.setItem('selectedPackageInLocalStorage', JSON.stringify(selectedPackage))
   }, [selectedPackage])
 
   //read file
@@ -136,11 +144,11 @@ const App = () => {
   return (
     <div className="App">
       <section className="header">
-        <h2>Package Analyser</h2>
+        <h2>DPKG File Analyser</h2>
         <p>
           Select a dpkg status file to see the status of installed packages, or use this {" "}
           <span>
-            <a href="https://gist.github.com/lauripiispanen/29735158335170c27297422a22b48caa" rel="noopener noreferrer" target="_blank">sample file.</a></span>
+            <a href={data} download="status.real">sample file.</a></span>
         </p>
       </section>
       <section className="input">
